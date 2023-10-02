@@ -1,7 +1,24 @@
 import React from "react";
+import Swal from "sweetalert2";
 
 export default function Tables({ data, value }) {
-  const tag = data.map((el) => {
+  const handelDelete = (item) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        value(item);
+        Swal.fire("Deleted!", "User has been deleted.", "success");
+      }
+    });
+  };
+  const tag = data.map((el, index) => {
     return (
       <tr
         key={el._id}
@@ -11,17 +28,20 @@ export default function Tables({ data, value }) {
           scope="row"
           className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
         >
-          {el._id}
+          {index + 1}
         </th>
         <td className="px-6 py-4">{el.name}</td>
         <td className="px-6 py-4">{el.email}</td>
-        <td className="px-6 py-4">{el.phoneNumber}</td>
+        <td className="px-6 py-4">
+          {el.active === true ? "active" : "not Active"}
+        </td>
 
-        <td className="px-6 py-4  " onClick={() => value(el._id)}>
+        <td className="px-6 py-4  " onClick={() => handelDelete(el._id)}>
           delete
         </td>
       </tr>
     );
   });
+
   return <>{tag}</>;
 }

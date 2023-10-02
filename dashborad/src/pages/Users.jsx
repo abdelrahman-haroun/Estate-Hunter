@@ -28,7 +28,7 @@ export default function Users() {
               Email
             </th>
             <th scope="col" className="px-6 py-3">
-              PhoneNumber
+              Active
             </th>
             <th scope="col" className="px-6 py-3">
               Action

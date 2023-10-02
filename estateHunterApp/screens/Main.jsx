@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   ScrollView,
   View,
@@ -6,82 +6,90 @@ import {
   Text,
   Button,
   SafeAreaView,
+  TouchableOpacity,
 } from "react-native";
+import axios from "axios";
 import Logo from "../component/logo";
 import CardForAds from "../component/CardForAds";
-export default function Main() {
-  const [data, setData] = useState([
-    {
-      id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-      title: "First Item",
-      image: "https://images.unsplash.com/photo-1526045612212-70caf35c14df",
-    },
-    {
-      id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-      title: "Second Item",
-      image: "https://images.unsplash.com/photo-1526045612212-70caf35c14df",
-    },
-    {
-      id: "58694a0f-3da1-471f-bd96-145571e29d72",
-      title: "Third Item",
-      image: "https://images.unsplash.com/photo-1526045612212-70caf35c14df",
-    },
-  ]);
+import PaidSlider from "../component/PaidSlider";
+export default function Main({ navigation }) {
+  const [data, setData] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  // console.log(data);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  const handleError = (error) => {
-    // Handle the error here
-    console.log(error);
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(
+        "http://192.168.1.36:8080/api/v1/account/getAll"
+      );
+      setData(res.data.data);
+      setIsLoading(true);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const navigateToTargetScreen = (item) => {
+    navigation.navigate("ViewAds", { data: item });
   };
 
   const renderItem = ({ item }) => {
     try {
       return (
-        <CardForAds
-          key={item.id}
-          image={item.image}
-          title={item.title}
-          location={item.title}
-          price={item.title}
-          desc={item.title}
-        />
+        <TouchableOpacity
+          key={item._id}
+          on
+          onPress={() => navigateToTargetScreen(item)}
+        >
+          <CardForAds
+            key={item._id}
+            image={item.img}
+            title={item.title}
+            location={item.location}
+            price={item.price}
+            desc={item.desc}
+          />
+        </TouchableOpacity>
       );
     } catch (error) {
-      handleError(error);
+      console.log(error);
     }
   };
+  if (!isLoading) {
+    return (
+      <View className="flex-1 items-center justify-center ">
+        <Text>Wait Just A moment</Text>
+      </View>
+    );
+  }
   return (
     <ScrollView className="bg-[#E7E7E7] ">
       <Logo />
-      <View className="w-[180] ml-4 h-[40] ">
-        <Button title="Add New Ads" />
+      <View className="mt-2 ">
+        {data?.paid.length > 0 && (
+          <PaidSlider
+            data={data?.paid}
+            currentIndex={currentIndex}
+            setCurrentIndex={setCurrentIndex}
+          />
+        )}
       </View>
+
       <View className="flex-row justify-between mt-2 items-center ">
         <Text className="text-2xl text-blue-500 pl-2 ">Premium Ads </Text>
         <Text className="text-l text-orange-500 pr-2 ">View All </Text>
       </View>
+
       <FlatList
-        keyExtractor={(item) => item.id}
-        data={data}
+        keyExtractor={(item) => item._id}
+        data={data.pre}
         renderItem={renderItem}
         horizontal
       />
-      <View className="mt-2 ">
-        <Text className="text-2xl text-blue-500 pl-2 "> Recently Added </Text>
-      </View>
-      <View className="my-2 mx-auto">
-        {data.map((item) => {
-          return (
-            <CardForAds
-              key={item.id}
-              image={item.image}
-              title={item.title}
-              location={item.title}
-              price={item.title}
-              desc={item.title}
-            />
-          );
-        })}
-      </View>
     </ScrollView>
   );
 }

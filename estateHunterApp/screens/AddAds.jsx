@@ -1,13 +1,25 @@
-import React, { useState } from "react";
-import { View, ScrollView, Text, Button, Image } from "react-native";
+import React, { useState, useContext } from "react";
+import {
+  View,
+  ScrollView,
+  Text,
+  Button,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import InputField from "../component/InputField";
 import { SelectList } from "react-native-dropdown-select-list";
 import * as ImagePicker from "expo-image-picker";
 import ButtonO from "../component/ButtonO";
-export default function AddAds() {
-  const [selected, setSelected] = useState({ f: "", a: "", c: "" });
-  const [images, setImages] = useState([]);
+import DataContext from "../context/context";
 
+export default function AddAds({ navigation }) {
+  const { addAdsData, setAddAdsData, handelAdd, images, setImages } =
+    useContext(DataContext);
+
+  const handelInput = (field, item) => {
+    setAddAdsData({ ...addAdsData, [field]: item });
+  };
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -21,30 +33,44 @@ export default function AddAds() {
     for (let i = 0; i < result.assets.length; i++) {
       x.push(result.assets[i].uri);
     }
-    setImages([...images, ...x]);
+    setImages([...x]);
   };
-  console.log(images);
-  console.log(selected);
+
   return (
     <ScrollView className="flex-1 bg-[#E7E7E7]">
       <View>
         <Text className="text-2xl font-bold text-center mt-2 ">
-          ------------ Add New Ads ------------
+          -------- Add New Ads -------
         </Text>
       </View>
       <View>
         <Text className="text-xl font-bold mx-auto  mt-2 ">
           {" "}
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quia ut
-          cupiditate beatae quod fugiat dolorum, vitae quasi qui earum adipisci
-          repudiandae consequuntur soluta. Quidem laborum repudiandae recusandae
-          iusto debitis quam.{" "}
+          cupiditate beatae quod fugiat dolorum, iusto debitis quam.{" "}
         </Text>
       </View>
       <View className="w-[90vw] mx-auto">
-        <InputField placeholder={"Title"} />
-        <InputField placeholder={`Price "JD"`} />
-        <InputField placeholder={"Description"} />
+        <InputField
+          placeholder={"Title"}
+          onChange={(text) => handelInput("title", text)}
+          type={"email-address"}
+        />
+        <InputField
+          placeholder={`Price "JD"`}
+          type={"phone-pad"}
+          onChange={(text) => handelInput("price", text)}
+        />
+        <InputField
+          placeholder={"Phone Number"}
+          type={"phone-pad"}
+          onChange={(text) => handelInput("phoneNumber", text)}
+        />
+        <InputField
+          placeholder={"Description"}
+          type={"email-address"}
+          onChange={(text) => handelInput("desc", text)}
+        />
         <SelectList
           placeholder="Type"
           data={[{ value: "rent" }, { value: "sell" }]}
@@ -56,7 +82,7 @@ export default function AddAds() {
             width: "95%",
           }}
           save="value"
-          setSelected={(val) => setSelected({ ...selected, f: val })}
+          setSelected={(val) => setAddAdsData({ ...addAdsData, type: val })}
         />
         <SelectList
           placeholder="Category"
@@ -75,7 +101,7 @@ export default function AddAds() {
             width: "95%",
           }}
           save="value"
-          setSelected={(val) => setSelected(val)}
+          setSelected={(val) => setAddAdsData({ ...addAdsData, cat: val })}
         />
         <SelectList
           placeholder="Location"
@@ -88,17 +114,22 @@ export default function AddAds() {
             width: "95%",
           }}
           save="value"
-          setSelected={(val) => setSelected(val)}
+          setSelected={(val) => setAddAdsData({ ...addAdsData, location: val })}
         />
       </View>
-      <View className="w-[90vw] flex-row   mt-4">
-        <Image source={{ uri: images[0] }} className="w-16 h-10 mx-2" />
-        <Image source={{ uri: images[1] }} className="w-16 h-10 mx-2" />
-
-        <Image source={{ uri: images[2] }} className="w-16 h-10 mx-2" />
-        <View>
-          <Button title="image piker" onPress={pickImage} />
-        </View>
+      <View className="w-[90vw] mx-auto flex-row justify-center   mt-4">
+        {images.map((el, index) => {
+          return (
+            <Image
+              key={index}
+              source={{ uri: el }}
+              className="w-16 h-14 mx-2"
+            />
+          );
+        })}
+      </View>
+      <View className=" flex-row justify-center">
+        <Button title="image piker" onPress={pickImage} />
       </View>
       <View className="w-[90vw] mx-auto mt-4 font-bold ">
         <Text className="text-xl text-orange-600">
@@ -107,7 +138,9 @@ export default function AddAds() {
         </Text>
       </View>
       <View className="flex-row justify-center mb-4">
-        <ButtonO word={"Add New Ads"} />
+        <TouchableOpacity onPress={() => handelAdd(navigation)}>
+          <ButtonO word={"Add New Ads"} />
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 
-export default function ImageSlider() {
+export default function ImageSlider({ images }) {
   const [index, setIndex] = useState(0);
   const handelNextImage = () => {
     if (index < images.length - 1) {
@@ -17,16 +17,11 @@ export default function ImageSlider() {
       setIndex(images.length - 1);
     }
   };
-  const images = [
-    require("../assets/img/firstpic.png"),
-    require("../assets/img/second.png"),
-    require("../assets/img/firstpic.png"),
-    require("../assets/img/second.png"),
-  ];
+
   return (
     <View className="relative">
       <Image
-        source={images[index]}
+        source={{ uri: images[index] }}
         className="w-screen h-[300] "
         style={{ objectFit: "fill" }}
       />

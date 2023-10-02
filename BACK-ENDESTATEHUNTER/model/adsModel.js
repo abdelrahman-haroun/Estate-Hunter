@@ -28,6 +28,9 @@ const AdsSchema = new mongoose.Schema({
   type: {
     type: String,
   },
+  phoneNumber: {
+    type: String,
+  },
   location: {
     type: String,
   },
@@ -38,6 +41,10 @@ const AdsSchema = new mongoose.Schema({
   createdAt: {
     type: String,
     default: format(new Date(), "dd-MM-yyyy"),
+  },
+  premium: {
+    type: Boolean,
+    default: false,
   },
 });
 const AdsModel = mongoose.model("Ads", AdsSchema);

@@ -7,6 +7,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  active: {
+    type: Boolean,
+    default: false,
+  },
   password: {
     type: String,
     required: [true, "please provide your password"],
@@ -14,7 +18,6 @@ const UserSchema = new mongoose.Schema({
   },
   confirmPassword: {
     type: String,
-    required: true,
     validate: {
       // This only works on CREATE and SAVE!!!
       validator: function (el) {
@@ -31,9 +34,22 @@ const UserSchema = new mongoose.Schema({
     lowercase: true,
     validate: [validator.isEmail, "Please provide a valid email"],
   },
+  activationToken: {
+    type: String,
+  },
   createdAt: {
     type: String,
     default: format(new Date(), "dd-MM-yyyy"),
+  },
+  adsSaved: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Ads",
+    },
+  ],
+  restPassword: {
+    type: String,
+    default: null,
   },
 });
 UserSchema.pre("save", async function (next) {

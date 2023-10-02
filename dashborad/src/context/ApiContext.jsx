@@ -12,7 +12,10 @@ export function ApiContextProvider({ children }) {
   const [adsData, setAdsData] = useState([]);
   //  this to store count of user vers date
   const [usersDate, setUsersDate] = useState([]);
+  //  --------
+  const [paidAds, setPaidAds] = useState([]);
   // fetch count of user vers date
+
   const fetchUsersDate = async () => {
     try {
       const res = await axios.get("http://127.0.0.1:8080/api/v1/users/number");
@@ -104,10 +107,22 @@ export function ApiContextProvider({ children }) {
       console.log(err);
     }
   };
+  // -----------
+  const fetchPaidAds = async () => {
+    try {
+      const res = await axios.get(
+        `http://127.0.0.1:8080/api/v1/account/getPaid`
+      );
+      setPaidAds(res.data.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   //  this use effect to run this function only in start server
   useEffect(() => {
     fetchAdsData();
     fetchUserData();
+    fetchPaidAds();
   }, []);
 
   const value = {
@@ -122,6 +137,7 @@ export function ApiContextProvider({ children }) {
     adminActive,
     setAdminActive,
     usersDate,
+    paidAds,
   };
   return <ApiContext.Provider value={value}>{children}</ApiContext.Provider>;
 }

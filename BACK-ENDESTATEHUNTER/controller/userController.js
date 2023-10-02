@@ -1,23 +1,59 @@
+const uuid = require("uuid");
 const User = require("../model/userModel");
+const { sendEmail } = require("../utils/email");
 exports.createNewUser = async (req, res) => {
-  console.log(req.body);
+  const { email, password, confirmPassword, name } = req.body;
+  if (!email || !password || !confirmPassword || !name) {
+    return res.status(400).json({
+      status: "fail",
+      message: " All field is required",
+    });
+  }
+
+  const activationToken = uuid.v4();
+  const activeLink = `http://127.0.0.1:8080/api/v1/account/active/${activationToken}`;
+
   try {
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      // If the email is already used, return an error response with the custom message
+      return res.status(400).json({ message: "This email is already used" });
+    }
+    req.body.activationToken = activationToken;
     const newUser = await User.create(req.body);
+    sendEmail(
+      newUser.email,
+      "hello",
+      "This is a test email sent from Node.js using Nodemailer and Gmail.",
+      `<p>
+        Click <a href="${activeLink}">here</a> to activate your account.
+      </p>`
+    );
     newUser.password = undefined;
+
     res.status(201).json({
       status: "success",
+      message: "Check Your Email To Active Account",
       newUser,
     });
   } catch (err) {
+    console.log(err);
     res.status(400).json({
       status: "fail",
-      message: err,
+      message: err.message,
     });
   }
 };
 exports.getAllUsers = async (req, res) => {
   try {
-    const allUser = await User.find({});
+    const allUser = await User.find({}).populate({
+      path: "adsSaved",
+      populate: {
+        path: "userId",
+        model: "Users",
+      },
+    });
     res.status(200).json({
       status: "success",
       data: allUser,
@@ -32,7 +68,7 @@ exports.getAllUsers = async (req, res) => {
 
 exports.deleteUser = async (req, res) => {
   try {
-    await User.findOneAndDelete(req.params.id);
+    await User.findByIdAndDelete(req.params.id);
     res.status(200).json({
       status: "success",
     });
@@ -48,7 +84,7 @@ exports.getOneUser = async (req, res) => {
   const { id } = req.params;
   console.log(id);
   try {
-    const user = await User.findById(id);
+    const user = await User.findById(id).populate("adsSaved");
     res.status(200).json({
       status: "success",
       data: user,
@@ -103,16 +139,26 @@ exports.logIn = async (req, res) => {
       message: "please provide email and password ",
     });
   }
-  const user = await User.findOne({ email }).select("+password");
+  const user = await User.findOne({ email })
+    .select("+password")
+    .populate("adsSaved");
+
   if (!user || !(await user.correctPassword(password, user.password))) {
     return res.status(400).json({
       status: "fail",
       message: "invalid password or email ",
     });
   }
+  if (user.active == false) {
+    return res.status(400).json({
+      status: "fail",
+      message: "Please Active Your Account",
+    });
+  }
   user.password = undefined;
   res.status(200).json({
     status: "success",
+    message: `Welcome ${user.name} `,
     data: user,
   });
 };

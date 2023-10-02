@@ -10,7 +10,7 @@ export default function NavWithAside() {
   return (
     <>
       <nav
-        onClick={() => (isOpen == true ? setIsOpen(false) : "")}
+        onClick={() => (isOpen === true ? setIsOpen(false) : "")}
         className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700"
       >
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
@@ -117,13 +117,21 @@ export default function NavWithAside() {
                     Pending
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    to="/adsPaid"
+                    className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  >
+                    Paid
+                  </Link>
+                </li>
               </ul>
             </li>
-            <li>
+            {/* <li>
               <a className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                 <span className="flex-1 ml-3 whitespace-nowrap">Profile</span>
               </a>
-            </li>
+            </li> */}
 
             <li>
               <p className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">

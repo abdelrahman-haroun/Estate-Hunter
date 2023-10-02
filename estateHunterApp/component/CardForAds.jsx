@@ -6,17 +6,17 @@ export default function CardForAds({ image, location, desc, title, price }) {
     <View className="w-[300] h-[290] bg-blue-300 rounded-[20px]  mt-2 mx-4">
       <View className="w-[300] h-[180]">
         <Image
-          source={{ uri: image }}
+          source={{ uri: image[0] }}
           className="w-[300] h-[170] rounded-t-[20px]"
         />
       </View>
       <View className=" px-4 flex gap-6">
         <View className=" flex-row justify-between ">
-          <Text>{title}</Text>
+          <Text>{title.slice(0, 15)}</Text>
           <Text>{price}</Text>
         </View>
         <View>
-          <Text>{desc}</Text>
+          <Text>{desc.slice(0, 40)}</Text>
         </View>
         <View className=" flex-row  ">
           <Image />

@@ -4,9 +4,11 @@ import Users from "./pages/Users";
 import Main from "./pages/Main";
 import AdsAccepted from "./pages/AdsAccepted";
 import AdsPending from "./pages/AdsPending";
+import AdsPaid from "./pages/AdsPaid";
 import Login from "./pages/Login";
 import ApiContext from "./context/ApiContext";
 import { Route, Routes } from "react-router-dom";
+// import Profile from "./pages/Profile";
 
 function App() {
   const { adminActive } = useContext(ApiContext);
@@ -50,6 +52,23 @@ function App() {
                 </div>
               }
             />
+
+            <Route
+              path="/adsPaid"
+              element={
+                <div className="p-4 sm:ml-64 mt-14">
+                  <AdsPaid />
+                </div>
+              }
+            />
+            {/* <Route
+              path="/Profile"
+              element={
+                <div className="p-4 sm:ml-64 mt-14">
+                  <Profile />
+                </div>
+              }
+            /> */}
           </Routes>
         </>
       ) : (
