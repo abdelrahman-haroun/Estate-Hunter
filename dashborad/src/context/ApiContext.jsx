@@ -36,8 +36,10 @@ export function ApiContextProvider({ children }) {
 
       setAdminActive(res.data.data);
       sessionStorage.setItem("Admin", res.data.data._id);
+      return res;
     } catch (err) {
       console.log(err);
+      return err.response;
     }
   };
   // this for if admin refresh page

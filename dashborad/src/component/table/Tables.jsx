@@ -36,8 +36,13 @@ export default function Tables({ data, value }) {
           {el.active === true ? "active" : "not Active"}
         </td>
 
-        <td className="px-6 py-4  " onClick={() => handelDelete(el._id)}>
-          delete
+        <td className="px-6 py-4   ">
+          <button
+            className="bg-red-500 p-2 text-white rounded-lg "
+            onClick={() => handelDelete(el._id)}
+          >
+            Delete
+          </button>
         </td>
       </tr>
     );

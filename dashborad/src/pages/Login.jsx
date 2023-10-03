@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import ApiContext from "../context/ApiContext";
-import Logo from "../asesst/icon/Logo.png";
+import Swal from "sweetalert2";
 export default function Login() {
   const [jsReady, setJsReady] = useState(false);
 
@@ -16,9 +16,18 @@ export default function Login() {
   const handelChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  const handelSubmit = (e) => {
+
+  const handelSubmit = async (e) => {
     e.preventDefault();
-    adminLogin(formData);
+    const res = await adminLogin(formData);
+    Swal.fire({
+      title: "Welcome",
+      text: res.data.message,
+      // icon: "warning",
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "okay",
+    });
   };
   return (
     <>

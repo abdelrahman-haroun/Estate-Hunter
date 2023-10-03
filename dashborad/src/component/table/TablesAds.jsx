@@ -42,16 +42,30 @@ export default function Tables({ adsData, value }) {
         <td className="px-6 py-4">{el.userId?.name}</td>
         <td className="px-6 py-4">{el.status}</td>
         {el.status === "Accepted" ? (
-          <td
-            className="px-6 py-4  "
-            onClick={() => handelDelete(el._id, "delete")}
-          >
-            delete
+          <td className="px-6 py-4  ">
+            <button
+              onClick={() => handelDelete(el._id, "delete")}
+              className="bg-red-500 p-2 text-white rounded-lg "
+            >
+              Delete
+            </button>
           </td>
         ) : (
           <td className="px-6 py-4  ">
-            <span onClick={() => handelDelete(el._id, "Accepted")}>Accept</span>
-            <span onClick={() => handelDelete(el._id, "Reject")}>Reject</span>
+            <div className="flex gap-2">
+              <button
+                className="bg-green-600 p-2 text-white rounded-lg "
+                onClick={() => handelDelete(el._id, "Accepted")}
+              >
+                Accept
+              </button>
+              <button
+                className="bg-red-500 p-2 text-white rounded-lg "
+                onClick={() => handelDelete(el._id, "Reject")}
+              >
+                Reject
+              </button>
+            </div>
           </td>
         )}
       </tr>

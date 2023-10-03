@@ -21,6 +21,7 @@ exports.logIn = async (req, res) => {
   admin.password = undefined;
   res.status(200).json({
     status: "success",
+    message: `hello ${admin.name}`,
     data: admin,
   });
 };

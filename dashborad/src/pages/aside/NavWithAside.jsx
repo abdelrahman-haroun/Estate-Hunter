@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import ApiContext from "../../context/ApiContext";
 
 export default function NavWithAside() {
-  const { setAdminActive } = useContext(ApiContext);
+  const { setAdminActive, adminActive } = useContext(ApiContext);
 
   const [isDropDown, setIsDropDown] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -52,6 +52,14 @@ export default function NavWithAside() {
       >
         <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
           <ul className="space-y-2 font-medium">
+            <li className="flex justify-center items-center">
+              <img src={adminActive.img} alt="profile" className="w-30 h-20" />
+            </li>
+            <li className="flex justify-center items-center">
+              <p>
+                Welcome <span className="font-bold">{adminActive.name}</span>
+              </p>
+            </li>
             <li>
               <Link
                 to="/"

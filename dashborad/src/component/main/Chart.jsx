@@ -6,7 +6,7 @@ import ApiContext from "../../context/ApiContext";
 export default function App() {
   const { adsData } = useContext(ApiContext);
   const Acc = adsData.filter((el) => {
-    return el.status == "Accepted";
+    return el.status === "Accepted";
   });
   const Pen = adsData.filter((el) => {
     return el.status !== "Accepted";

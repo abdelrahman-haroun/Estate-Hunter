@@ -6,7 +6,7 @@ import ApiContext from "../context/ApiContext";
 export default function AdsPending() {
   const { adsData, setAdsData, deleteAds, updateAds } = useContext(ApiContext);
   const data = adsData.filter((el) => {
-    return el.status == "pending";
+    return el.status === "pending";
   });
 
   const handelAccepted = (id) => {

@@ -20,7 +20,7 @@ export default function Tables({ adsData }) {
         </td>
 
         <td className="px-6 py-4">
-          {el.status === true ? "active" : "Not Active"}
+          {el.status === true ? "Active" : "Not Active"}
         </td>
       </tr>
     );

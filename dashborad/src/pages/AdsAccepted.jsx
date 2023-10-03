@@ -4,9 +4,9 @@ import { useContext } from "react";
 import ApiContext from "../context/ApiContext";
 
 export default function AdsAccepted() {
-  const { adsData, setAdsData, deleteAds, updateAds } = useContext(ApiContext);
+  const { adsData, setAdsData, deleteAds } = useContext(ApiContext);
   const data = adsData.filter((el) => {
-    return el.status == "Accepted";
+    return el.status === "Accepted";
   });
   const handelDelete = (id) => {
     deleteAds(id);
